@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pagina 2</title>
+    </head>
+    <body>
+        <input type="file" id="file-input"/>
+        <p id="texto"></p>
+
+        <script>
+            function readSingleFile(e) {
+            var file = e.target.files[0];
+            if (!file) {
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function(e) {
+            var contents = e.target.result;
+            displayContents(contents);
+            };
+            reader.readAsText(file);
+            }
+
+            document.getElementById('file-input')
+                .addEventListener('change', readSingleFile, false);
+  
+            var xmlDoc;
+            function parse(contents)
+            {
+                //Create a parser
+                var parser = new DOMParser();
+                xmlDoc = parser.parseFromString(contents,"text/xml");
+                //Parse!
+                //document.getElementById("texto").innerText = "First Name: " + xmlDoc.evaluate("//ARTIGO-PUBLICADO",xmlDoc).iterateNext().textContent;
+                document.getElementById("texto").innerHTML = xmlDoc.getElementsByTagName("ARTIGO-PUBLICADO")[0].childNodes[0];
+            }
+        </script>
+    </body>
+</html>
