@@ -1,51 +1,57 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Página de Teste</title>
-    </head>
-    <body>
 
-        <input type="file" id="file-input" />
-        <h3>Contents of the file:</h3>
-        <pre id="file-content"></pre>
-        <pre id="nome"></pre>
+<head>
+    <meta charset="utf-8">
+    <title>Página de Teste</title>
+</head>
 
-        <script>
-            function readSingleFile(e) {
+<body>
+
+    <input type="file" id="file-input" />
+    <h3>Contents of the file:</h3>
+    <pre id="file-content"></pre>
+    <pre id="nome"></pre>
+
+    <script>
+        function readSingleFile(e) {
             var file = e.target.files[0];
             if (!file) {
                 return;
             }
             var reader = new FileReader();
-            reader.onload = function(e) {
-            var contents = e.target.result;
-            displayContents(contents);
+            reader.onload = function (e) {
+                var contents = e.target.result;
+                displayContents(contents);
             };
-            reader.readAsText(file);
+            reader.readAsText(file)
         }
 
-            function displayContents(contents) {
-                var element = document.getElementById('file-content');
-                //element.textContent = contents;
-                //parse(contents);
+        function displayContents(contents) {
+            var element = document.getElementById('file-content');
+            //element.textContent = contents;
+            parse(contents);
         }
 
-            document.getElementById('file-input')
-                .addEventListener('change', readSingleFile, false);
-  
-            var xmlDoc;
-            function parse(content)
-            {
-                //Create a parser
-                var parser = new DOMParser();
-                xmlDoc = parser.parseFromString(content,"text/xml");
-                //Parse!
-                document.getElementById("nome").innerHTML = xmlDoc.getElementsByName("ARTIGO-PUBLICADO").nodeValue;
-                //document.getElementById("FirstName").innerText = "First Name: " + xmlDoc.evaluate("//FirstName",xmlDoc).iterateNext().textContent;
-                //document.getElementById("Description").innerText = "Description: " + xmlDoc.evaluate("//Description",xmlDoc).iterateNext().textContent;
-                //document.getElementById("PriceAmount").innerText = "Price: " + xmlDoc.evaluate("//PriceAmount",xmlDoc).iterateNext().textContent;
+        function parse(content) {
+            //Create a parser
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(content, "text/xml");
+            //Parse!
+
+            var x = xmlDoc.getElementsByTagName("ARTIGO-PUBLICADO")
+            for (i = 0; i < x.length; i++) {
+                
+                document.getElementById("nome").innerHTML += "Título do artigo " + i + ": " + x[i].childNodes[1].attributes[1].nodeValue + "<br>"
             }
-        </script>
-    </body>
+
+            //document.getElementById("FirstName").innerText = "First Name: " + xmlDoc.evaluate("//FirstName",xmlDoc).iterateNext().textContent;
+            //document.getElementById("Description").innerText = "Description: " + xmlDoc.evaluate("//Description",xmlDoc).iterateNext().textContent;
+            //document.getElementById("PriceAmount").innerText = "Price: " + xmlDoc.evaluate("//PriceAmount",xmlDoc).iterateNext().textContent;
+        }
+
+        document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+    </script>
+</body>
+
 </html>
